@@ -28,12 +28,10 @@ have their own devices, which is the case for all but very old Rain Bird setups.
   description with the zones it waters and for how long, e.g. `Zone 1: 10 min`. It shows when
   you click an event, in the calendar entity's `description` attribute, and in calendar
   triggers as `trigger.calendar_event.description`.
-- **The calendar entity is disabled by default.** New setups start with it off. An existing
-  calendar entity stays enabled until you turn it off in its entity settings. The other schedule
-  features work either way.
 - **The schedule loads at startup without the calendar.** The built-in integration only fetches
   the schedule while the calendar entity is enabled. Here it loads in the background shortly
-  after startup and refreshes every 15 minutes, whether or not the calendar is enabled.
+  after startup and refreshes every 15 minutes, whether or not the calendar is enabled, so you
+  can disable the calendar entity and keep the other schedule features.
 - **Diagnostics.** **Settings → Devices & services → Rainbird Custom → ⋮ → Download diagnostics**
   gives a JSON file with the full schedule (frequency, days, start times and minutes per zone for
   each program), the controller model, firmware and limits, and the current state. The host,
@@ -103,6 +101,6 @@ licensed under the Apache License 2.0 (see [LICENSE](LICENSE)). The modification
 
 - new `button.py` and `diagnostics.py`;
 - next run and zone run time sensors in `sensor.py`;
-- zone run times in event descriptions and disabled by default in `calendar.py`;
+- zone run times in event descriptions in `calendar.py`;
 - the schedule loading at startup in `__init__.py`;
 - the related icon, translation and manifest entries, and the `brand/` images.
