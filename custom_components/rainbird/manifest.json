@@ -9,5 +9,5 @@
   "issue_tracker": "https://github.com/pavandave/rainbird_HACS/issues",
   "loggers": ["pyrainbird"],
   "requirements": ["pyrainbird==6.5.0"],
-  "version": "2026.9.3.1"
+  "version": "2026.9.3.2"
 }
