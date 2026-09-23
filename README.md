@@ -11,7 +11,8 @@ config entry, entities and automations keep working.
 
 ## Install
 
-1. In HACS, open the menu → **Custom repositories**, add this repository's URL, category **Integration**.
+1. In HACS, open the menu → **Custom repositories**, add
+   `https://github.com/pavandave/rainbird_HACS` with category **Integration**.
 2. Download **Rain Bird (program buttons)**, then restart Home Assistant.
 3. Open the Rain Bird controller device. You'll see `Run program A`, `Run program B`, and so on.
    The number of buttons comes from the controller model's program limit.
@@ -22,3 +23,9 @@ Use the buttons in automations with the `button.press` action.
 
 Remove it in HACS and restart. Home Assistant goes back to the built-in integration, and the
 program button entities become unavailable, so you can delete them.
+
+## License
+
+This is a modified copy of code from [Home Assistant Core](https://github.com/home-assistant/core),
+licensed under the Apache License 2.0 (see [LICENSE](LICENSE)). The modification is the addition
+of `custom_components/rainbird/button.py` and the related platform, icon and translation entries.
