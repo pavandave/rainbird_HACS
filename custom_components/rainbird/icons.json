@@ -26,6 +26,9 @@
       },
       "program_next_run": {
         "default": "mdi:calendar-clock"
+      },
+      "zone_run_time": {
+        "default": "mdi:timer-outline"
       }
     }
   },

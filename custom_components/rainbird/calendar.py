@@ -125,17 +125,3 @@ class RainBirdCalendarEntity(
             end_date,
         )
         return [_calendar_event(schedule, program_event) for program_event in cursor]
-
-    @override
-    async def async_added_to_hass(self) -> None:
-        """When entity is added to hass."""
-        await super().async_added_to_hass()
-
-        # We do not ask for an update with async_add_entities()
-        # because it will update disabled entities. This is started as a
-        # task to let it sync in the background without blocking startup
-        self.coordinator.config_entry.async_create_background_task(
-            self.hass,
-            self.coordinator.async_request_refresh(),
-            "rainbird.calendar-refresh",
-        )

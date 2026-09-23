@@ -7,6 +7,9 @@ integration (from Home Assistant 2026.9.3) with these additions:
   it starts that program, using `pyrainbird`'s `set_program`.
 - **Program next run sensors**: a timestamp sensor per program showing when it next starts.
   It moves on to the following run as soon as a run starts.
+- **Zone run time sensors**: on each zone's device, a `Program A run time` sensor (in minutes)
+  for every program that waters that zone. Handy as secondary info on a zone's dashboard card.
+  If a zone is later removed from a program, its sensor shows 0.
 - **Zone run times in the calendar**: each program event in the Rain Bird calendar lists the
   zones it waters and for how long, e.g. `Zone 1: 10 min`.
 - **Diagnostics**: **Download diagnostics** on the device page gives a JSON file with the full
@@ -27,9 +30,11 @@ config entry, entities and automations keep working.
 
 Use the buttons in automations with the `button.press` action.
 
-The schedule loads in the background shortly after startup and refreshes every 15 minutes, so
-the next run sensors and calendar can be empty for a moment after a restart. To reload it
-straight away, run the `homeassistant.update_entity` action on the Rain Bird calendar entity.
+The schedule loads in the background shortly after startup, even if the calendar entity is
+disabled, and refreshes every 15 minutes. The schedule sensors and calendar can be empty for a
+moment after a restart, and zone run time sensors appear once the schedule has loaded. To reload
+the schedule straight away, run the `homeassistant.update_entity` action on any `Program A next
+run` sensor or the Rain Bird calendar.
 
 ## Uninstall
 

@@ -1,13 +1,19 @@
 {
   "domain": "rainbird",
   "name": "Rainbird Custom",
-  "codeowners": ["@pavandave"],
+  "codeowners": [
+    "@pavandave"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/pavandave/rainbird_HACS",
   "integration_type": "hub",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/pavandave/rainbird_HACS/issues",
-  "loggers": ["pyrainbird"],
-  "requirements": ["pyrainbird==6.5.0"],
-  "version": "2026.9.3.2"
+  "loggers": [
+    "pyrainbird"
+  ],
+  "requirements": [
+    "pyrainbird==6.5.0"
+  ],
+  "version": "2026.9.3.3"
 }

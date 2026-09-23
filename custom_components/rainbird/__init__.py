@@ -142,6 +142,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: RainbirdConfigEntry) -> 
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
+    # The schedule needs a request per program and zone, so it loads in the
+    # background instead of delaying setup.
+    if model_info.model_info.max_programs:
+        entry.async_create_background_task(
+            hass,
+            data.schedule_coordinator.async_refresh(),
+            "rainbird.schedule-refresh",
+        )
+
     entry.async_on_unload(entry.add_update_listener(async_update_listener))
 
     return True

@@ -56,6 +56,9 @@
       },
       "program_next_run": {
         "name": "Program {program} next run"
+      },
+      "zone_run_time": {
+        "name": "Program {program} run time"
       }
     }
   },

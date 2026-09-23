@@ -9,13 +9,16 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorEntityDescription,
 )
+from homeassistant.const import UnitOfTime
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.event import async_track_point_in_utc_time
 from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import dt as dt_util
 
+from .const import DOMAIN
 from .coordinator import RainbirdScheduleUpdateCoordinator, RainbirdUpdateCoordinator
 from .types import RainbirdConfigEntry
 
@@ -48,6 +51,34 @@ async def async_setup_entry(
                 for program in range(data.model_info.model_info.max_programs)
             ),
         ]
+    )
+
+    # Zone run time sensors live on the zone devices, which need a unique id.
+    if (unique_id := data.coordinator.unique_id) is None:
+        return
+    added: set[tuple[int, int]] = set()
+
+    @callback
+    def _async_add_zone_run_time_sensors() -> None:
+        """Add a sensor for each zone that a program waters."""
+        if (schedule := data.schedule_coordinator.data) is None:
+            return
+        new = [
+            (program.program, zone.zone)
+            for program in schedule.programs
+            for zone in program.durations
+            if zone.zone in data.coordinator.data.zones
+            and (program.program, zone.zone) not in added
+        ]
+        added.update(new)
+        async_add_entities(
+            RainBirdZoneRunTimeSensor(data.schedule_coordinator, unique_id, *pair)
+            for pair in new
+        )
+
+    _async_add_zone_run_time_sensors()
+    config_entry.async_on_unload(
+        data.schedule_coordinator.async_add_listener(_async_add_zone_run_time_sensors)
     )
 
 
@@ -159,3 +190,52 @@ class RainBirdProgramNextRunSensor(
         if (event := next(timeline.start_after(dt_util.now()), None)) is None:
             return None
         return dt_util.as_local(event.start)
+
+
+class RainBirdZoneRunTimeSensor(
+    CoordinatorEntity[RainbirdScheduleUpdateCoordinator], SensorEntity
+):
+    """How long a program waters a zone."""
+
+    _attr_device_class = SensorDeviceClass.DURATION
+    _attr_has_entity_name = True
+    _attr_native_unit_of_measurement = UnitOfTime.MINUTES
+    _attr_translation_key = "zone_run_time"
+
+    def __init__(
+        self,
+        coordinator: RainbirdScheduleUpdateCoordinator,
+        unique_id: str,
+        program: int,
+        zone: int,
+    ) -> None:
+        """Initialize the Rain Bird zone run time sensor."""
+        super().__init__(coordinator)
+        self._program = program
+        self._zone = zone
+        self._attr_translation_placeholders = {"program": chr(ord("A") + program)}
+        self._attr_unique_id = f"{unique_id}-{zone}-program-{program}-run-time"
+        # The zone device is created by the switch platform.
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, f"{unique_id}-{zone}")}
+        )
+
+    @property
+    @override
+    def native_value(self) -> int | None:
+        """Return the minutes the program waters the zone, or 0 if it no longer does."""
+        if (schedule := self.coordinator.data) is None:
+            return None
+        program = next(
+            (p for p in schedule.programs if p.program == self._program), None
+        )
+        if program is None:
+            return 0
+        return next(
+            (
+                int(zone.duration.total_seconds() // 60)
+                for zone in program.durations
+                if zone.zone == self._zone
+            ),
+            0,
+        )
