@@ -1,4 +1,4 @@
-# Rain Bird (program buttons)
+# Rainbird Custom
 
 A copy of the built-in Home Assistant [Rain Bird](https://www.home-assistant.io/integrations/rainbird)
 integration (from Home Assistant 2026.9.3) with these additions:
@@ -21,7 +21,7 @@ config entry, entities and automations keep working.
 
 1. In HACS, open the menu → **Custom repositories**, add
    `https://github.com/pavandave/rainbird_HACS` with category **Integration**.
-2. Download **Rain Bird (program buttons)**, then restart Home Assistant.
+2. Download **Rainbird Custom**, then restart Home Assistant.
 3. Open the Rain Bird controller device. You'll see `Run program A`, `Program A next run`, and
    so on. The number of programs comes from the controller model's program limit.
 

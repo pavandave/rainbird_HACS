@@ -1,6 +1,6 @@
 {
   "domain": "rainbird",
-  "name": "Rain Bird",
+  "name": "Rainbird Custom",
   "codeowners": ["@pavandave"],
   "config_flow": true,
   "documentation": "https://github.com/pavandave/rainbird_HACS",
