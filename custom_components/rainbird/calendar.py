@@ -75,6 +75,7 @@ class RainBirdCalendarEntity(
 ):
     """A calendar event entity."""
 
+    _attr_entity_registry_enabled_default = False
     _attr_has_entity_name = True
     _attr_name: str | None = None
     _attr_translation_key = "calendar"

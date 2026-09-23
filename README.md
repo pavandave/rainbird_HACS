@@ -11,8 +11,9 @@ integration (from Home Assistant 2026.9.3) with these additions:
   for every program that waters that zone. Handy as secondary info on a zone's dashboard card.
   If a zone is later removed from a program, its sensor shows 0.
 - **Zone run times in the calendar**: each program event in the Rain Bird calendar lists the
-  zones it waters and for how long, e.g. `Zone 1: 10 min`.
-- **Diagnostics**: **Download diagnostics** on the device page gives a JSON file with the full
+  zones it waters and for how long, e.g. `Zone 1: 10 min`. The calendar entity is now disabled
+  by default; enable it in the entity's settings if you want it.
+- **Diagnostics**: **Download diagnostics** in the integration entry's ⋮ menu gives a JSON file with the full
   schedule (frequency, days, start times, zone run times), the model and the current state.
   The host, password, MAC address and serial number are redacted.
 
