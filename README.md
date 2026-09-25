@@ -14,9 +14,9 @@ Rain Bird config entry, entities and automations keep working.
 
 | Entity | Where | What it does |
 |---|---|---|
-| **Run program A / B / C…** (button) | Controller device | Starts that program on the controller right away, the same as starting it manually at the controller. One button per program the controller model supports. |
-| **Program A / B / C… next run** (timestamp sensor) | Controller device | When the program next starts, taking the rain delay into account. Moves on to the following run as soon as a run starts. Empty if the program has no start times or no zones. |
-| **Program A / B / C… run time** (duration sensor, minutes) | Each zone's device | How long a program waters that zone. A zone only gets a sensor for the programs that water it. If a zone is later removed from a program, its sensor shows 0. |
+| **Run PGM A / B / C…** (button) | Controller device | Starts that program on the controller right away, the same as starting it manually at the controller. One button per program the controller model supports. |
+| **PGM A / B / C… next run** (timestamp sensor) | Controller device | When the program next starts, taking the rain delay into account. Moves on to the following run as soon as a run starts. Empty if the program has no start times or no zones. |
+| **PGM A / B / C… run time** (duration sensor, minutes) | Each zone's device | How long a program waters that zone. A zone only gets a sensor for the programs that water it. If a zone is later removed from a program, its sensor shows 0. |
 
 The run time sensors are created once the schedule has loaded, and new ones appear at the next
 schedule refresh when you add a zone to a program on the controller. They need the zones to
@@ -34,8 +34,8 @@ have their own devices, which is the case for all but very old Rain Bird setups.
   can disable the calendar entity and keep the other schedule features.
 - **Diagnostics.** **Settings → Devices & services → Rainbird Custom → ⋮ → Download diagnostics**
   gives a JSON file with the full schedule (frequency, days, start times and minutes per zone for
-  each program), the controller model, firmware and limits, and the current state. The host,
-  password, MAC address and serial number are redacted.
+  each program), the controller model, firmware and limits, the current state, and the default
+  irrigation time option. The host, password, MAC address and serial number aren't included.
 - **Name and icon.** The integration shows as **Rainbird Custom**, and the Rain Bird icon and
   logo are included in the integration.
 
@@ -51,17 +51,17 @@ sensor, the rain sensor, the default irrigation time option, and the `pyrainbird
    `https://github.com/pavandave/rainbird_HACS` with category **Integration**.
 2. Download **Rainbird Custom**, then restart Home Assistant. A restart is required; reloading
    the integration isn't enough.
-3. Open the Rain Bird controller device. You'll see `Run program A`, `Program A next run`, and
-   so on. The zone devices get their `Program A run time` sensors a few seconds after startup.
+3. Open the Rain Bird controller device. You'll see `Run PGM A`, `PGM A next run`, and
+   so on. The zone devices get their `PGM A run time` sensors a few seconds after startup.
 
 Requires Home Assistant 2026.9 or later.
 
 ## Usage
 
-- **Start a program from an automation:** use the `button.press` action on a `Run program`
+- **Start a program from an automation:** use the `button.press` action on a `Run PGM`
   button.
 - **Reload the schedule right away:** run `homeassistant.update_entity` on any
-  `Program A next run` sensor (or the calendar, if enabled). Otherwise it refreshes every 15
+  `PGM A next run` sensor (or the calendar, if enabled). Otherwise it refreshes every 15
   minutes, so changes made on the controller or in the Rain Bird app can take that long to show.
 - **Show run times on a dashboard:** the built-in entities card can't show another entity as a
   row's secondary info. With [multiple-entity-row](https://github.com/benct/lovelace-multiple-entity-row)
@@ -74,20 +74,21 @@ Requires Home Assistant 2026.9 or later.
       type: custom:multiple-entity-row
       toggle: true
       secondary_info:
-        entity: sensor.rain_bird_sprinkler_1_program_b_run_time
-        name: "Program B:"
+        entity: sensor.rain_bird_sprinkler_1_pgm_b_run_time
+        name: "PGM B:"
     # A zone in two programs: show both as columns
     - entity: switch.rain_bird_sprinkler_2
       type: custom:multiple-entity-row
       toggle: true
       entities:
-        - entity: sensor.rain_bird_sprinkler_2_program_a_run_time
-          name: Prog A
-        - entity: sensor.rain_bird_sprinkler_2_program_b_run_time
-          name: Prog B
+        - entity: sensor.rain_bird_sprinkler_2_pgm_a_run_time
+          name: PGM A
+        - entity: sensor.rain_bird_sprinkler_2_pgm_b_run_time
+          name: PGM B
   ```
 
-  Entity IDs depend on your device names, so check them on each zone's device page.
+  Entity IDs depend on your device names, so check them on each zone's device page. Installs
+  from before 0.1.2 keep their original `…_program_a_…` entity IDs.
 
 ## Uninstall
 

@@ -4,6 +4,8 @@ from datetime import datetime
 import logging
 from typing import override
 
+from pyrainbird.timeline import ProgramId
+
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -129,14 +131,14 @@ class RainBirdProgramNextRunSensor(
         super().__init__(coordinator)
         self._program = program
         self._unsub_run_started: CALLBACK_TYPE | None = None
-        letter = chr(ord("A") + program)
-        self._attr_translation_placeholders = {"program": letter}
+        program_name = ProgramId(program).name
+        self._attr_translation_placeholders = {"program": program_name}
         if (unique_id := device_coordinator.unique_id) is not None:
             self._attr_unique_id = f"{unique_id}-program-{program}-next-run"
             self._attr_device_info = device_coordinator.device_info
         else:
             self._attr_name = (
-                f"{device_coordinator.device_name} Program {letter} next run"
+                f"{device_coordinator.device_name} {program_name} next run"
             )
 
     @override
@@ -213,7 +215,7 @@ class RainBirdZoneRunTimeSensor(
         super().__init__(coordinator)
         self._program = program
         self._zone = zone
-        self._attr_translation_placeholders = {"program": chr(ord("A") + program)}
+        self._attr_translation_placeholders = {"program": ProgramId(program).name}
         self._attr_unique_id = f"{unique_id}-{zone}-program-{program}-run-time"
         # The zone device is created by the switch platform.
         self._attr_device_info = DeviceInfo(

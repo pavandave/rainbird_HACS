@@ -42,7 +42,7 @@
     },
     "button": {
       "run_program": {
-        "name": "Run program {program}"
+        "name": "Run {program}"
       }
     },
     "number": {
@@ -55,10 +55,10 @@
         "name": "Raindelay"
       },
       "program_next_run": {
-        "name": "Program {program} next run"
+        "name": "{program} next run"
       },
       "zone_run_time": {
-        "name": "Program {program} run time"
+        "name": "{program} run time"
       }
     }
   },

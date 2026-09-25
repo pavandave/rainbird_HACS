@@ -15,5 +15,5 @@
   "requirements": [
     "pyrainbird==6.5.0"
   ],
-  "version": "0.1.1"
+  "version": "0.1.2"
 }
